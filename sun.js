@@ -361,7 +361,7 @@ async function updateSunData() {
   phien_hien_tai,
   tong_diem: tong,
   tong_xuc_xac: `[ ${x1}-${x2}-${x3} ]`,
-  ket_qua: tx === "T" ? "TAI" : "XIU",
+  ket_qua: tx === "T" ? "Tài" : "Xỉu",
   chuoi_cau,
   du_doan,
   do_tin_cay
