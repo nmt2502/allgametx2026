@@ -15,9 +15,10 @@ let state = {
   phien: 0,
   phien_hien_tai: 0,
   tong_diem: 0,
-  ket_qua: "CHUA_CO",
+  tong_xuc_xac: [],
+  ket_qua: "Chưa Có",
   chuoi_cau: "",
-  du_doan: "CHO",
+  du_doan: "Chờ Đủ Dữ Liệu",
   do_tin_cay: "0%"
 };
 
@@ -356,14 +357,15 @@ async function updateSunData() {
     }
 
     state = {
-      phien,
-      phien_hien_tai,
-      tong_diem: tong,
-      ket_qua: tx === "T" ? "TAI" : "XIU",
-      chuoi_cau,
-      du_doan,
-      do_tin_cay
-    };
+  phien,
+  phien_hien_tai,
+  tong_diem: tong,
+  tong_xuc_xac: `[ ${x1}-${x2}-${x3} ]`,
+  ket_qua: tx === "T" ? "TAI" : "XIU",
+  chuoi_cau,
+  du_doan,
+  do_tin_cay
+};
 
     console.log(
       `[SUN] Phiên ${phien_hien_tai} | ${chuoi_cau} | ${du_doan} | ${do_tin_cay}`
@@ -379,17 +381,17 @@ setInterval(updateSunData, POLL_TIME);
 /* ================== API SUN ================== */
 module.exports = (app) => {
   app.get("/api/sun", (req, res) => {
-    res.json({
-      ID: "Bi Trum Api",
-      game: "SUNWIN",
-      phien: state.phien,
-      tong_xuc_xac: "GET_TU_API_GOC",
-      tong_diem: state.tong_diem,
-      ket_qua: state.ket_qua,
-      phien_hien_tai: state.phien_hien_tai, // ✅ ĐÚNG YÊU CẦU
-      du_doan: state.du_doan,
-      do_tin_cay: state.do_tin_cay,
-      chuoi_cau: state.chuoi_cau
-    });
+  res.json({
+    ID: "Bi Trum Api",
+    game: "SUNWIN",
+    phien: state.phien,
+    tong_xuc_xac: state.tong_xuc_xac,
+    tong_diem: state.tong_diem,
+    ket_qua: state.ket_qua,
+    phien_hien_tai: state.phien_hien_tai,
+    du_doan: state.du_doan,
+    do_tin_cay: state.do_tin_cay,
+    chuoi_cau: state.chuoi_cau
   });
+});
 };
