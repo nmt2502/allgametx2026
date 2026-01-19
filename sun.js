@@ -20,7 +20,7 @@ let state = {
   do_tin_cay: "0%"
 };
 
-/* ================== PATTERN BẺ CẦU ================== */
+/* ================== THUẬT TOÁN ĐỘC QUYỀN BY BI NHOI ================== */
 const BREAK_PATTERNS = {
 "TXXTTXTX": "Xỉu",
 "XXTTXTXX": "Tài",
