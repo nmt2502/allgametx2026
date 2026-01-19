@@ -325,7 +325,6 @@ function fuzzyMatch(chuoi, patterns) {
 
 /* ================== UPDATE NGẦM ================== */
 async function updateSunData() {
-async function updateSunData() {
   try {
     const r = await fetch(API_URL);
     const api = await r.json();
@@ -334,14 +333,15 @@ async function updateSunData() {
     const phien_hien_tai = api.phien_hien_tai;
     const tong = api.tong;
 
-    // ✅ LẤY XÚC XẮC TỪ API GỐC
     const x1 = api.xuc_xac_1;
     const x2 = api.xuc_xac_2;
     const x3 = api.xuc_xac_3;
 
-    // 🔒 chỉ khi qua phiên mới
+    // 🔒 chưa qua phiên → không cộng
     if (phien === lastPhien) return;
     lastPhien = phien;
+
+    if ([x1, x2, x3].some(v => v == null)) return;
 
     const tx = tong >= 11 ? "T" : "X";
 
@@ -359,19 +359,17 @@ async function updateSunData() {
       do_tin_cay = match.percent + "%";
     }
 
-    state = {
-      phien,
-      phien_hien_tai,
-      tong_diem: tong,
-      tong_xuc_xac: `[ ${x1}-${x2}-${x3} ]`, // ✅ HẾT LỖI
-      ket_qua: tx === "T" ? "Tài" : "Xỉu",
-      chuoi_cau,
-      du_doan,
-      do_tin_cay
-    };
+    state.phien = phien;
+    state.phien_hien_tai = phien_hien_tai;
+    state.tong_diem = tong;
+    state.tong_xuc_xac = [x1, x2, x3];
+    state.ket_qua = tx === "T" ? "Tài" : "Xỉu";
+    state.chuoi_cau = chuoi_cau;
+    state.du_doan = du_doan;
+    state.do_tin_cay = do_tin_cay;
 
     console.log(
-      `[SUN] Phiên ${phien_hien_tai} | [${x1}-${x2}-${x3}] | ${chuoi_cau} | ${du_doan} | ${do_tin_cay}`
+      `[SUN] ${phien_hien_tai} | [${x1}-${x2}-${x3}] | ${chuoi_cau} | ${du_doan} ${do_tin_cay}`
     );
 
   } catch (e) {
@@ -381,20 +379,20 @@ async function updateSunData() {
 
 setInterval(updateSunData, POLL_TIME);
 
-/* ================== API SUN ================== */
+/* ================== API EXPORT ================== */
 module.exports = (app) => {
   app.get("/api/sun", (req, res) => {
-  res.json({
-    ID: "Bi Trum Api",
-    game: "SUNWIN",
-    phien: state.phien,
-    tong_xuc_xac: state.tong_xuc_xac,
-    tong_diem: state.tong_diem,
-    ket_qua: state.ket_qua,
-    phien_hien_tai: state.phien_hien_tai,
-    du_doan: state.du_doan,
-    do_tin_cay: state.do_tin_cay,
-    chuoi_cau: state.chuoi_cau
+    res.json({
+      ID: "Bi Trùm Api",
+      game: "SUNWIN",
+      phien: state.phien,
+      phien_hien_tai: state.phien_hien_tai,
+      tong_diem: state.tong_diem,
+      tong_xuc_xac: state.tong_xuc_xac,
+      ket_qua: state.ket_qua,
+      chuoi_cau: state.chuoi_cau,
+      du_doan: state.du_doan,
+      do_tin_cay: state.do_tin_cay
+    });
   });
-});
 };
