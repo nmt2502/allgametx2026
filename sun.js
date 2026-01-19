@@ -327,13 +327,19 @@ function fuzzyMatch(chuoi, patterns) {
 
 /* ================== UPDATE NGẦM ================== */
 async function updateSunData() {
+async function updateSunData() {
   try {
     const r = await fetch(API_URL);
     const api = await r.json();
 
     const phien = api.phien;
-    const phien_hien_tai = api.phien_hien_tai; // ✅ LẤY TỪ API GỐC
+    const phien_hien_tai = api.phien_hien_tai;
     const tong = api.tong;
+
+    // ✅ LẤY XÚC XẮC TỪ API GỐC
+    const x1 = api.xuc_xac_1;
+    const x2 = api.xuc_xac_2;
+    const x3 = api.xuc_xac_3;
 
     // 🔒 chỉ khi qua phiên mới
     if (phien === lastPhien) return;
@@ -350,25 +356,24 @@ async function updateSunData() {
     let do_tin_cay = state.do_tin_cay;
 
     const match = fuzzyMatch(chuoi_cau, BREAK_PATTERNS);
-
     if (match && match.score >= 5) {
       du_doan = match.result.toUpperCase();
       do_tin_cay = match.percent + "%";
     }
 
     state = {
-  phien,
-  phien_hien_tai,
-  tong_diem: tong,
-  tong_xuc_xac: `[ ${x1}-${x2}-${x3} ]`,
-  ket_qua: tx === "T" ? "Tài" : "Xỉu",
-  chuoi_cau,
-  du_doan,
-  do_tin_cay
-};
+      phien,
+      phien_hien_tai,
+      tong_diem: tong,
+      tong_xuc_xac: `[ ${x1}-${x2}-${x3} ]`, // ✅ HẾT LỖI
+      ket_qua: tx === "T" ? "Tài" : "Xỉu",
+      chuoi_cau,
+      du_doan,
+      do_tin_cay
+    };
 
     console.log(
-      `[SUN] Phiên ${phien_hien_tai} | ${chuoi_cau} | ${du_doan} | ${do_tin_cay}`
+      `[SUN] Phiên ${phien_hien_tai} | [${x1}-${x2}-${x3}] | ${chuoi_cau} | ${du_doan} | ${do_tin_cay}`
     );
 
   } catch (e) {
