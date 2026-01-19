@@ -1,10 +1,8 @@
 
 // sun.js
-const fetch = (...args) =>
-  import("node-fetch").then(({ default: fetch }) => fetch(...args));
 
 /* ================== CONFIG ================== */
-const API_URL = "https://sunwinsaygex-pcl2.onrender.com/api/sun"; // <-- API GỐC
+const API_URL = "https://sunwinsaygex-pcl2.onrender.com/api/sun";
 const POLL_TIME = 3000;
 
 /* ================== STATE ================== */
